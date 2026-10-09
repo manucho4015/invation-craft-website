@@ -43,15 +43,14 @@ function makeLine(w: number, h: number, scatter = false): ScanLine {
 // ─── Content ─────────────────────────────────────────────────────────────────
 
 const LIFECYCLE_ITEMS = [
-    "Application consultation",
-    "Product selection",
-    "Inventory management",
-    "Product supply",
-    "Installation support",
-    "Spares support",
-    "After-sales service & repair",
+    "Discovery call & kickoff",
+    "Requirements & scope",
+    "Design & prototyping",
+    "Architecture & planning",
+    "Iterative development",
+    "Testing & client review",
+    "Launch & handover",
 ];
-
 // ─── Layout constants ─────────────────────────────────────────────────────────
 
 const WHEEL_DIAMETER = 300;
@@ -351,165 +350,162 @@ export default function Lifecycle() {
     // ────────────────────────────────────────────────────────────────────────────
 
     return (
-        <div ref={wrapperRef} className="relative ">
-
-            <div
-                ref={stickyRef}
-                className="sticky top-0 h-screen bg-blue overflow-hidden"
-                style={{ willChange: "clip-path" }}
-            >
-                <h2 className="text-white/80 absolute top-20 left-10">Support Across the Entire <br /> Product Lifecycle</h2>
-                {/* Blueprint canvas */}
-                <canvas
-                    ref={canvasRef}
-                    className="absolute inset-0 w-full h-full pointer-events-none select-none"
-                    aria-hidden="true"
-                />
-
-                {/* ── SVG lifecycle path — drawn progressively with the wheel ── */}
-                <svg
-                    className="absolute inset-0 w-full h-full pointer-events-none"
-                    style={{ zIndex: 15 }}
-                >
-                    <defs>
-                        {/* Soft glow so the line reads as an active/live connection */}
-                        <filter id="lc-glow" x="-20%" y="-20%" width="140%" height="140%">
-                            <feGaussianBlur stdDeviation="2.5" result="blur" />
-                            <feMerge>
-                                <feMergeNode in="blur" />
-                                <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                        </filter>
-                    </defs>
-                    <path
-                        ref={pathRef}
-                        fill="none"
-                        stroke="rgba(255,255,255,0.40)"
-                        strokeWidth="1"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        filter="url(#lc-glow)"
+        <section className="full-bleed" aria-label="Our software development cycle">
+            <div ref={wrapperRef} className="relative">
+                <div ref={stickyRef} className="sticky top-0 h-screen bg-blue overflow-hidden" style={{ willChange: "clip-path" }}>
+                    <h2 className="text-white/80 absolute top-20 left-10">Support Across the Entire <br /> Product Lifecycle</h2>
+                    {/* Blueprint canvas */}
+                    <canvas
+                        ref={canvasRef}
+                        className="absolute inset-0 w-full h-full pointer-events-none select-none"
+                        aria-hidden="true"
                     />
-                </svg>
 
-                {/* ── Lifecycle items — diagonal, bottom-left → top-right ── */}
-                <div className="absolute inset-0" style={{ zIndex: 20 }}>
-                    {LIFECYCLE_ITEMS.map((item, i) => {
-                        const { leftPct, bottomPct } = getItemPos(i, LIFECYCLE_ITEMS.length);
-                        return (
-                            <div
-                                key={i}
-                                ref={(el) => { itemRefs.current[i] = el; }}
-                                className="absolute flex items-center gap-5"
-                                style={{ left: `${leftPct}%`, bottom: `${bottomPct}%` }}
-                            >
-                                {/* Phase number */}
-                                <span className="text-white/30 font-mono text-[10px] tabular-nums leading-none select-none">
-                                    {String(i + 1).padStart(2, "0")}
-                                </span>
+                    {/* ── SVG lifecycle path — drawn progressively with the wheel ── */}
+                    <svg
+                        className="absolute inset-0 w-full h-full pointer-events-none"
+                        style={{ zIndex: 15 }}
+                    >
+                        <defs>
+                            {/* Soft glow so the line reads as an active/live connection */}
+                            <filter id="lc-glow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="2.5" result="blur" />
+                                <feMerge>
+                                    <feMergeNode in="blur" />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <path
+                            ref={pathRef}
+                            fill="none"
+                            stroke="rgba(255,255,255,0.40)"
+                            strokeWidth="1"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            filter="url(#lc-glow)"
+                        />
+                    </svg>
 
-                                {/* Node dot with ring — the point the path threads through */}
-                                <div className="relative flex items-center justify-center w-3 h-3 shrink-0">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-white/70" />
-                                    <div className="absolute w-3 h-3 rounded-full border border-white/25" />
+                    {/* ── Lifecycle items — diagonal, bottom-left → top-right ── */}
+                    <div className="absolute inset-0" style={{ zIndex: 20 }}>
+                        {LIFECYCLE_ITEMS.map((item, i) => {
+                            const { leftPct, bottomPct } = getItemPos(i, LIFECYCLE_ITEMS.length);
+                            return (
+                                <div
+                                    key={i}
+                                    ref={(el) => { itemRefs.current[i] = el; }}
+                                    className="absolute flex items-center gap-5"
+                                    style={{ left: `${leftPct}%`, bottom: `${bottomPct}%` }}
+                                >
+                                    {/* Phase number */}
+                                    <span className="text-white/30 font-mono text-[10px] tabular-nums leading-none select-none">
+                                        {String(i + 1).padStart(2, "0")}
+                                    </span>
+
+                                    {/* Node dot with ring — the point the path threads through */}
+                                    <div className="relative flex items-center justify-center w-3 h-3 shrink-0">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-white/70" />
+                                        <div className="absolute w-3 h-3 rounded-full border border-white/25" />
+                                    </div>
+
+                                    {/* Label */}
+                                    <span className="text-white/85 text-sm font-medium tracking-wide whitespace-nowrap" style={{ fontSize: "clamp(1 rem, 1.25vw + .25rem,  1.5 rem)" }}>
+                                        {item}
+                                    </span>
                                 </div>
+                            );
+                        })}
+                    </div>
 
-                                {/* Label */}
-                                <span className="text-white/85 text-sm font-medium tracking-wide whitespace-nowrap" style={{ fontSize: "clamp(1 rem, 1.25vw + .25rem,  1.5 rem)" }}>
-                                    {item}
-                                </span>
-                            </div>
-                        );
-                    })}
-                </div>
-
-                {/* ── Ball bearing wheel ── */}
-                {/*
+                    {/* ── Ball bearing wheel ── */}
+                    {/*
           - bottom-0 + y: WHEEL_DIAMETER/2 via GSAP → only top half visible initially
           - As scroll progresses, y animates to 0 → fully revealed
           - x animates 0 → travelX (left → right)
           - rotation: physically derived from circumference
         */}
-                <div
-                    ref={wheelRef}
-                    className="absolute bottom-0"
-                    style={{
-                        right: PAD_LEFT,
-                        width: WHEEL_DIAMETER,
-                        height: WHEEL_DIAMETER,
-                        zIndex: 30,
-                    }}
-                >
-                    <svg
-                        width="100%"
-                        height="100%"
-                        viewBox="0 0 800 800"
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-label="Ball bearing"
+                    <div
+                        ref={wheelRef}
+                        className="absolute bottom-0"
+                        style={{
+                            right: PAD_LEFT,
+                            width: WHEEL_DIAMETER,
+                            height: WHEEL_DIAMETER,
+                            zIndex: 30,
+                        }}
                     >
-                        <g fill="none" stroke="rgba(255,255,255,0.75)" strokeLinecap="round" strokeLinejoin="round">
-                            <defs>
-                                <clipPath id="bearing-clip">
-                                    <circle cx="400" cy="400" r="360" />
-                                </clipPath>
-                            </defs>
+                        <svg
+                            width="100%"
+                            height="100%"
+                            viewBox="0 0 800 800"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-label="Ball bearing"
+                        >
+                            <g fill="none" stroke="rgba(255,255,255,0.75)" strokeLinecap="round" strokeLinejoin="round">
+                                <defs>
+                                    <clipPath id="bearing-clip">
+                                        <circle cx="400" cy="400" r="360" />
+                                    </clipPath>
+                                </defs>
 
-                            {/* Outer two rings */}
-                            <g ref={outerRingRef} >
-                                <circle cx="400" cy="400" r="360" strokeWidth="2.5" />
-                                <circle cx="400" cy="400" r="330" strokeWidth="1.5" />
-                            </g>
+                                {/* Outer two rings */}
+                                <g ref={outerRingRef} >
+                                    <circle cx="400" cy="400" r="360" strokeWidth="2.5" />
+                                    <circle cx="400" cy="400" r="330" strokeWidth="1.5" />
+                                </g>
 
-                            {/* Everything else clipped to the outer circumference */}
-                            <g clipPath="url(#bearing-clip)">
-                                {/* Raceway outer */}
-                                <circle cx="400" cy="400" r="300" strokeWidth="1.2" />
-                                <circle cx="400" cy="400" r="280" strokeWidth="1.2" />
+                                {/* Everything else clipped to the outer circumference */}
+                                <g clipPath="url(#bearing-clip)">
+                                    {/* Raceway outer */}
+                                    <circle cx="400" cy="400" r="300" strokeWidth="1.2" />
+                                    <circle cx="400" cy="400" r="280" strokeWidth="1.2" />
 
-                                {/* Cage boundary */}
-                                <circle cx="400" cy="400" r="250" strokeWidth="1" strokeDasharray="6 6" />
-                                <circle cx="400" cy="400" r="230" strokeWidth="1" strokeDasharray="6 6" />
+                                    {/* Cage boundary */}
+                                    <circle cx="400" cy="400" r="250" strokeWidth="1" strokeDasharray="6 6" />
+                                    <circle cx="400" cy="400" r="230" strokeWidth="1" strokeDasharray="6 6" />
 
-                                {/* Raceway inner */}
-                                <circle cx="400" cy="400" r="200" strokeWidth="1.2" />
-                                <circle cx="400" cy="400" r="170" strokeWidth="1.2" />
+                                    {/* Raceway inner */}
+                                    <circle cx="400" cy="400" r="200" strokeWidth="1.2" />
+                                    <circle cx="400" cy="400" r="170" strokeWidth="1.2" />
 
-                                {/* Inner ring */}
-                                <circle cx="400" cy="400" r="140" strokeWidth="2.5" />
-                                <circle cx="400" cy="400" r="110" strokeWidth="1.5" />
+                                    {/* Inner ring */}
+                                    <circle cx="400" cy="400" r="140" strokeWidth="2.5" />
+                                    <circle cx="400" cy="400" r="110" strokeWidth="1.5" />
 
-                                {/* Ball bearings */}
-                                <g strokeWidth="1.2">
-                                    <g id="ball">
-                                        <circle cx="400" cy="140" r="16" />
-                                        <circle cx="400" cy="140" r="10" strokeWidth="0.6" opacity="0.5" />
+                                    {/* Ball bearings */}
+                                    <g strokeWidth="1.2">
+                                        <g id="ball">
+                                            <circle cx="400" cy="140" r="16" />
+                                            <circle cx="400" cy="140" r="10" strokeWidth="0.6" opacity="0.5" />
+                                        </g>
+                                        {[22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5].map((deg) => (
+                                            <use key={deg} href="#ball" transform={`rotate(${deg} 400 400)`} />
+                                        ))}
                                     </g>
-                                    {[22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5].map((deg) => (
-                                        <use key={deg} href="#ball" transform={`rotate(${deg} 400 400)`} />
-                                    ))}
+
+                                    {/* Radial guides */}
+                                    <g strokeWidth="0.6" opacity="0.25">
+                                        <line x1="400" y1="40" x2="400" y2="760" />
+                                        <line x1="40" y1="400" x2="760" y2="400" />
+                                        <line x1="120" y1="120" x2="680" y2="680" />
+                                        <line x1="680" y1="120" x2="120" y2="680" />
+                                    </g>
+
+                                    {/* Outer technical ticks */}
+                                    <g strokeWidth="1">
+                                        <line x1="400" y1="40" x2="400" y2="70" />
+                                        <line x1="400" y1="730" x2="400" y2="760" />
+                                        <line x1="40" y1="400" x2="70" y2="400" />
+                                        <line x1="730" y1="400" x2="760" y2="400" />
+                                    </g>
                                 </g>
 
-                                {/* Radial guides */}
-                                <g strokeWidth="0.6" opacity="0.25">
-                                    <line x1="400" y1="40" x2="400" y2="760" />
-                                    <line x1="40" y1="400" x2="760" y2="400" />
-                                    <line x1="120" y1="120" x2="680" y2="680" />
-                                    <line x1="680" y1="120" x2="120" y2="680" />
-                                </g>
-
-                                {/* Outer technical ticks */}
-                                <g strokeWidth="1">
-                                    <line x1="400" y1="40" x2="400" y2="70" />
-                                    <line x1="400" y1="730" x2="400" y2="760" />
-                                    <line x1="40" y1="400" x2="70" y2="400" />
-                                    <line x1="730" y1="400" x2="760" y2="400" />
-                                </g>
                             </g>
-
-                        </g>
-                    </svg>
+                        </svg>
+                    </div>
                 </div>
-            </div>
-        </div >
+            </div >
+        </section>
     );
 }
