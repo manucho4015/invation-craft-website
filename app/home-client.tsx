@@ -31,6 +31,7 @@ import type { Project } from "../types/project";
 import studio from "../public/technology-studio.jpg";
 import team from "../public/team-studio.jpg";
 import ProjectItem from "@/components/home/ProjectItem";
+import Lifecycle from "@/components/home/LifeCycle";
 
 gsap.registerPlugin(ScrollTrigger, Observer, ScrollToPlugin);
 
@@ -89,6 +90,7 @@ export default function HomeClient() {
             let busyUntil = 0;
             let done = false;
             let observer: Observer | null = null;
+            let st: ScrollTrigger | null = null; // declared first so callbacks can't hit it uninitialized
 
             const unlock = () => {
                 observer?.kill();
@@ -99,8 +101,8 @@ export default function HomeClient() {
                 if (done) return;
                 done = true;
                 unlock();
-                st.kill();
-                setActiveIndex(last); // already open from the last step; this also covers the "jumped past" case
+                st?.kill();
+                setActiveIndex(last);
             };
 
             const next = () => {
@@ -151,14 +153,14 @@ export default function HomeClient() {
                 gsap.to(window, { scrollTo: { y: section }, duration: 0.5, ease: "power2.out", overwrite: true });
             };
 
-            const st = ScrollTrigger.create({
+            st = ScrollTrigger.create({
                 trigger: section,
                 start: "top 40%",
                 end: "bottom top",
                 onEnter: lock,
                 onLeaveBack: unlock,
                 onLeave: () => {
-                    // user jumped past (anchor link, keyboard): skip the intro
+                    // user jumped past (anchor link, keyboard, reload mid-page): skip the intro
                     if (!done) {
                         gsap.set(items, { opacity: 1, y: 0 });
                         finish();
@@ -166,8 +168,11 @@ export default function HomeClient() {
                 },
             });
 
+            // If a callback already ran finish() during create(), the trigger wasn't killed yet
+            if (done) st.kill();
+
             return () => {
-                st.kill();
+                st?.kill();
                 unlock();
             };
         });
@@ -283,6 +288,8 @@ export default function HomeClient() {
                     ))}
                 </div>
             </section>
+
+            <Lifecycle />
 
             <section id="why-us" className="benefits-section content-width" aria-labelledby="benefits-title">
                 <h2 id="benefits-title">Why <span className="accent-text">Choose</span> Invasion-Craft</h2>
