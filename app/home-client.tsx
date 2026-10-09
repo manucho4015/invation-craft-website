@@ -1,15 +1,17 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Observer } from "gsap/Observer";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import {
     ArrowUpRight,
     ArrowRight,
     CodeXml,
     Menu,
     X,
-    Plus,
-    Minus,
     Globe2,
     Smartphone,
     Monitor,
@@ -25,15 +27,26 @@ import {
     DialogTitle,
     DialogDescription,
 } from "@/components/dialog";
+import type { Project } from "../types/project";
 import studio from "../public/technology-studio.jpg";
 import team from "../public/team-studio.jpg";
+import ProjectItem from "@/components/home/ProjectItem";
 
-const steps = [
-    { title: "Discovery & strategy", heading: <>A clear vision.<br /><span className="accent-text">A stronger foundation.</span></>, text: "Great software starts with the right questions. We explore your goals, your users, and your business to shape a focused product strategy.", image: team, caption: "01 / Understand the possibilities" },
-    { title: "Experience & interface design", heading: <>Complex ideas.<br /><span className="accent-text">Intuitive experiences.</span></>, text: "We turn your vision into thoughtful user journeys and clear interfaces. Every interaction is designed to feel natural, on every screen.", image: team, caption: "02 / Designed around people" },
-    { title: "Development & integration", heading: <>Built with care.<br /><span className="accent-text">Ready to connect.</span></>, text: "From web platforms to mobile and desktop apps, we craft dependable software with a connected architecture and the integrations your business needs.", image: studio, caption: "03 / Ideas become applications" },
-    { title: "Testing & launch", heading: <>Every detail tested.<br /><span className="accent-text">Every launch considered.</span></>, text: "We put performance, usability, and reliability through their paces. Then we bring your product to life with a carefully planned launch.", image: studio, caption: "04 / Ready for the real world" },
-    { title: "Ongoing support & evolution", heading: <>Ongoing <span className="accent-text">Support</span><br />and Evolution</>, text: "Our commitment goes beyond launch. We keep your applications running smoothly, adapt to your users’ needs, and help your software grow alongside your business.", image: studio, caption: "05 / Built for what comes next" },
+gsap.registerPlugin(ScrollTrigger, Observer, ScrollToPlugin);
+
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
+const currentYear = new Date().getFullYear();
+
+
+
+// PLACEHOLDER CONTENT: swap in your real projects and screenshots
+const projects: Project[] = [
+    { title: "Project One", heading: <>Project <span className="accent-text">One</span><br />Web platform</>, text: "Short description of what the product does, who it serves, and the outcome it delivered.", tags: ["Web", "Next.js", "Supabase"], image: team, imageAlt: "Project One interface", caption: "01 / Web platform" },
+    { title: "Project Two", heading: <>Project <span className="accent-text">Two</span><br />Mobile app</>, text: "Short description of what the product does, who it serves, and the outcome it delivered.", tags: ["Mobile", "React Native", "Expo"], image: studio, imageAlt: "Project Two interface", caption: "02 / Mobile app" },
+    { title: "Project Three", heading: <>Project <span className="accent-text">Three</span><br />Desktop app</>, text: "Short description of what the product does, who it serves, and the outcome it delivered.", tags: ["Desktop", "TypeScript"], image: team, imageAlt: "Project Three interface", caption: "03 / Desktop app" },
+    { title: "Project Four", heading: <>Project <span className="accent-text">Four</span><br />SaaS dashboard</>, text: "Short description of what the product does, who it serves, and the outcome it delivered.", tags: ["Web", "SaaS", "Analytics"], image: studio, imageAlt: "Project Four interface", caption: "04 / SaaS dashboard" },
+    { title: "Project Five", heading: <>Project <span className="accent-text">Five</span><br />Cross-platform suite</>, text: "Short description of what the product does, who it serves, and the outcome it delivered.", tags: ["Web", "Mobile", "Desktop"], image: studio, imageAlt: "Project Five interface", caption: "05 / Cross-platform suite" },
 ];
 
 function Brand() {
@@ -50,6 +63,117 @@ export default function HomeClient() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [contactOpen, setContactOpen] = useState(false);
     const [briefReady, setBriefReady] = useState(false);
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const processRef = useRef<HTMLElement>(null);
+
+    useIsoLayoutEffect(() => {
+        const section = processRef.current;
+        if (!section) return;
+
+        const items = gsap.utils.toArray<HTMLElement>(".process-item", section);
+        const last = items.length - 1;
+        const STEP_MS = 1200; // one scroll gesture advances one slide; long enough to read the opened project
+
+        const mm = gsap.matchMedia();
+
+        // Reduced motion: no intro, show everything in its final state
+        mm.add("(prefers-reduced-motion: reduce)", () => {
+            gsap.set(items, { opacity: 1, y: 0 });
+            setActiveIndex(last);
+        });
+
+        mm.add("(prefers-reduced-motion: no-preference)", () => {
+            gsap.set(items, { opacity: 0, y: 70 });
+
+            let shown = -1; // index of the last slide revealed
+            let busyUntil = 0;
+            let done = false;
+            let observer: Observer | null = null;
+
+            const unlock = () => {
+                observer?.kill();
+                observer = null;
+            };
+
+            const finish = () => {
+                if (done) return;
+                done = true;
+                unlock();
+                st.kill();
+                setActiveIndex(last); // already open from the last step; this also covers the "jumped past" case
+            };
+
+            const next = () => {
+                const now = performance.now();
+                if (now < busyUntil || shown >= last) return;
+                busyUntil = now + STEP_MS;
+                shown += 1;
+
+                // Opens the new slide and closes the previous one
+                setActiveIndex(shown);
+
+                gsap.to(items[shown], {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.9,
+                    ease: "power3.out",
+                    overwrite: true,
+                    onComplete: () => { if (shown === last) finish(); },
+                });
+            };
+
+            const prev = () => {
+                const now = performance.now();
+                if (now < busyUntil) return;
+                if (shown < 0) { unlock(); return; } // nothing revealed: let the user scroll back up
+                busyUntil = now + STEP_MS;
+
+                gsap.to(items[shown], { y: 70, opacity: 0, duration: 0.5, ease: "power2.in", overwrite: true });
+                shown -= 1;
+
+                // Re-open the slide before it (or close everything if none are left)
+                setActiveIndex(shown >= 0 ? shown : null);
+            };
+
+            const lock = () => {
+                if (done || observer) return;
+                observer = Observer.create({
+                    target: window,
+                    type: "wheel,touch",
+                    wheelSpeed: -1, // so onUp = scrolling down, onDown = scrolling up
+                    tolerance: 10,
+                    preventDefault: true,
+                    allowClicks: true,
+                    ignore: "[role='dialog']",
+                    onUp: () => next(),
+                    onDown: () => prev(),
+                });
+                gsap.to(window, { scrollTo: { y: section }, duration: 0.5, ease: "power2.out", overwrite: true });
+            };
+
+            const st = ScrollTrigger.create({
+                trigger: section,
+                start: "top 40%",
+                end: "bottom top",
+                onEnter: lock,
+                onLeaveBack: unlock,
+                onLeave: () => {
+                    // user jumped past (anchor link, keyboard): skip the intro
+                    if (!done) {
+                        gsap.set(items, { opacity: 1, y: 0 });
+                        finish();
+                    }
+                },
+            });
+
+            return () => {
+                st.kill();
+                unlock();
+            };
+        });
+
+        return () => mm.revert();
+    }, []);
 
     function openContact() {
         setBriefReady(false);
@@ -142,43 +266,20 @@ export default function HomeClient() {
                 </div>
             </section>
 
-            <section id="process" className="process-section content-width" aria-labelledby="process-title">
+            <section id="process" ref={processRef} className="process-section content-width" aria-labelledby="process-title">
                 <div className="section-heading">
-                    <h2 id="process-title">How We <span className="accent-text">Simplify</span> Your<br />Software Journey</h2>
-                    <span className="section-tag">FROM THE FIRST IDEA. TO WHAT’S NEXT.</span>
+                    <h2 id="process-title">Work We’re <span className="accent-text">Proud</span> Of<br />Selected Projects</h2>
+                    <span className="section-tag">BUILT FOR WEB. MOBILE. DESKTOP.</span>
                 </div>
                 <div className="process-stack">
-                    {steps.map((step, index) => (
-                        <div className="process-item" key={step.title}>
-                            <Button
-                                variant="ghost"
-                                className="process-toggle"
-                                onClick={() => setActiveStep(activeStep === index ? null : index)}
-                                aria-expanded={activeStep === index}
-                                aria-controls={`step-${index}`}
-                            >
-                                <span className="process-label"><span>0{index + 1}</span><span>{step.title}</span></span>
-                                {activeStep === index ? <Minus size={15} /> : <Plus size={15} />}
-                            </Button>
-                            {activeStep === index && (
-                                <div className="process-panel" id={`step-${index}`}>
-                                    <div className="process-copy">
-                                        <span className="process-number">{index + 1}</span>
-                                        <h3>{step.heading}</h3>
-                                        <p>{step.text}</p>
-                                    </div>
-                                    <div className="process-photo">
-                                        <Image
-                                            src={step.image}
-                                            alt={index < 2 ? "Collaborative software design and planning" : "Connected software applications in a modern studio"}
-                                            width={1024}
-                                            height={1024}
-                                        />
-                                        <span className="photo-caption">{step.caption}</span>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                    {projects.map((project, index) => (
+                        <ProjectItem
+                            key={project.title}
+                            project={project}
+                            index={index}
+                            isOpen={activeIndex === index}
+                            onToggle={() => setActiveIndex(activeIndex === index ? null : index)}
+                        />
                     ))}
                 </div>
             </section>
@@ -220,9 +321,7 @@ export default function HomeClient() {
 
             <footer className="footer content-width">
                 <Brand />
-                <Suspense fallback={<span className="footer-note">© ... Invasion-Craft. Crafted for what’s next.</span>}>
-                    <span className="footer-note">© {new Date().getFullYear()} Invasion-Craft. Crafted for what’s next.</span>
-                </Suspense>
+                <span className="footer-note">© {currentYear} Invasion-Craft. Crafted for what’s next.</span>
                 <Button variant="link" size="sm" onClick={openContact}>
                     Let’s build something <ArrowRight />
                 </Button>
