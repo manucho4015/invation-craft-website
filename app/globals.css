@@ -62,11 +62,11 @@ html {
 }
 body {
   margin: 0;
-  background: var(--canvas);
   color: var(--foreground);
   font-family: var(--font-sans);
   font-size: 14px;
   letter-spacing: 0;
+  overflow-x: clip;
 }
 button,
 a,
@@ -77,9 +77,22 @@ textarea {
 a {
   text-decoration: none;
 }
+
+.full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-top: 94px;
+}
 .site-shell {
   padding: 28px;
   background: var(--background);
+}
+.site-shell.is-first {
+  margin-bottom: 0;
+}
+
+.site-shell.is-last {
+  margin-top: 0;
 }
 .hero {
   height: 560px;
