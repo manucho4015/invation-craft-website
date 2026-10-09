@@ -199,99 +199,101 @@ export default function HomeClient() {
     }
 
     return (
-        <main className="site-shell" id="home">
-            <section className="hero" aria-labelledby="hero-title">
-                <Image
-                    className="hero-image"
-                    src={studio}
-                    alt="Modern technology studio with web, tablet, and desktop applications"
-                    priority
-                    fill
-                    sizes="100vw"
-                />
-                <header className="navbar">
-                    <Brand />
-                    <nav aria-label="Main navigation" className={`nav-links ${menuOpen ? "is-open" : ""}`}>
-                        <a href="#about" onClick={() => setMenuOpen(false)}>Who we are</a>
-                        <a href="#services" onClick={() => setMenuOpen(false)}>What we build</a>
-                        <a href="#process" onClick={() => setMenuOpen(false)}>Our process</a>
-                        <a href="#why-us" onClick={() => setMenuOpen(false)}>Why choose us</a>
-                    </nav>
-                    <Button variant="craft" size="sm" className="nav-contact" onClick={openContact}>
-                        Contact us <ArrowUpRight />
-                    </Button>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="menu-trigger"
-                        aria-label={menuOpen ? "Close menu" : "Open menu"}
-                        aria-expanded={menuOpen}
-                        onClick={() => setMenuOpen(!menuOpen)}
-                    >
-                        {menuOpen ? <X /> : <Menu />}
-                    </Button>
-                </header>
-                <div className="hero-copy">
-                    <div>
-                        <div className="eyebrow">Ideas into impact</div>
-                        <h1 id="hero-title">Invasion-Craft<br />Software, thoughtfully built.</h1>
-                    </div>
-                    <div>
-                        <p>We bring your ideas to life through purposeful SaaS applications. Web, mobile, and desktop — crafted to work beautifully together.</p>
-                        <Button variant="hero" onClick={openContact}>Start your project <ArrowUpRight /></Button>
-                    </div>
-                </div>
-            </section>
-
-            <section id="about" className="about-section content-width" aria-labelledby="about-title">
-                <div className="platform-card" id="services">
-                    <div className="eyebrow">One vision.<br />Every platform.</div>
-                    <CodeXml className="craft-symbol" strokeWidth={1.1} />
-                    <div className="platform-bottom">
-                        <div>
-                            <div className="platform-number">3<span>↗</span></div>
-                            <p>Platforms. Endless possibilities.</p>
-                        </div>
-                        <div className="platform-names">Web apps<br />Mobile apps<br />Desktop apps</div>
-                    </div>
-                </div>
-                <div className="about-card">
-                    <div className="about-copy">
-                        <h2 id="about-title">Who <span className="accent-text">We</span> Are</h2>
-                        <p>We’re Invasion-Craft. A technology company turning ambitious ideas into software that makes a difference.</p>
-                        <p>From the first conversation to the final release, we bring design and engineering together to craft SaaS applications around your business — and the people who use them.</p>
-                    </div>
+        <>
+            <main className="site-shell is-first" id="home">
+                <section className="hero" aria-labelledby="hero-title">
                     <Image
-                        className="about-image"
-                        src={team}
-                        alt="Software engineers collaborating on code and app designs"
-                        width={1024}
-                        height={1024}
+                        className="hero-image"
+                        src={studio}
+                        alt="Modern technology studio with web, tablet, and desktop applications"
+                        priority
+                        fill
+                        sizes="100vw"
                     />
-                </div>
-            </section>
+                    <header className="navbar">
+                        <Brand />
+                        <nav aria-label="Main navigation" className={`nav-links ${menuOpen ? "is-open" : ""}`}>
+                            <a href="#about" onClick={() => setMenuOpen(false)}>Who we are</a>
+                            <a href="#services" onClick={() => setMenuOpen(false)}>What we build</a>
+                            <a href="#process" onClick={() => setMenuOpen(false)}>Our process</a>
+                            <a href="#why-us" onClick={() => setMenuOpen(false)}>Why choose us</a>
+                        </nav>
+                        <Button variant="craft" size="sm" className="nav-contact" onClick={openContact}>
+                            Contact us <ArrowUpRight />
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="menu-trigger"
+                            aria-label={menuOpen ? "Close menu" : "Open menu"}
+                            aria-expanded={menuOpen}
+                            onClick={() => setMenuOpen(!menuOpen)}
+                        >
+                            {menuOpen ? <X /> : <Menu />}
+                        </Button>
+                    </header>
+                    <div className="hero-copy">
+                        <div>
+                            <div className="eyebrow">Ideas into impact</div>
+                            <h1 id="hero-title">Invasion-Craft<br />Software, thoughtfully built.</h1>
+                        </div>
+                        <div>
+                            <p>We bring your ideas to life through purposeful SaaS applications. Web, mobile, and desktop — crafted to work beautifully together.</p>
+                            <Button variant="hero" onClick={openContact}>Start your project <ArrowUpRight /></Button>
+                        </div>
+                    </div>
+                </section>
 
-            <section id="process" ref={processRef} className="process-section content-width" aria-labelledby="process-title">
-                <div className="section-heading">
-                    <h2 id="process-title">Work We’re <span className="accent-text">Proud</span> Of<br />Selected Projects</h2>
-                    <span className="section-tag">BUILT FOR WEB. MOBILE. DESKTOP.</span>
-                </div>
-                <div className="process-stack">
-                    {projects.map((project, index) => (
-                        <ProjectItem
-                            key={project.title}
-                            project={project}
-                            index={index}
-                            isOpen={activeIndex === index}
-                            onToggle={() => setActiveIndex(activeIndex === index ? null : index)}
+                <section id="about" className="about-section content-width" aria-labelledby="about-title">
+                    <div className="platform-card" id="services">
+                        <div className="eyebrow">One vision.<br />Every platform.</div>
+                        <CodeXml className="craft-symbol" strokeWidth={1.1} />
+                        <div className="platform-bottom">
+                            <div>
+                                <div className="platform-number">3<span>↗</span></div>
+                                <p>Platforms. Endless possibilities.</p>
+                            </div>
+                            <div className="platform-names">Web apps<br />Mobile apps<br />Desktop apps</div>
+                        </div>
+                    </div>
+                    <div className="about-card">
+                        <div className="about-copy">
+                            <h2 id="about-title">Who <span className="accent-text">We</span> Are</h2>
+                            <p>We’re Invasion-Craft. A technology company turning ambitious ideas into software that makes a difference.</p>
+                            <p>From the first conversation to the final release, we bring design and engineering together to craft SaaS applications around your business — and the people who use them.</p>
+                        </div>
+                        <Image
+                            className="about-image"
+                            src={team}
+                            alt="Software engineers collaborating on code and app designs"
+                            width={1024}
+                            height={1024}
                         />
-                    ))}
-                </div>
-            </section>
+                    </div>
+                </section>
+
+                <section id="process" ref={processRef} className="process-section content-width" aria-labelledby="process-title">
+                    <div className="section-heading">
+                        <h2 id="process-title">Work We’re <span className="accent-text">Proud</span> Of<br />Selected Projects</h2>
+                        <span className="section-tag">BUILT FOR WEB. MOBILE. DESKTOP.</span>
+                    </div>
+                    <div className="process-stack">
+                        {projects.map((project, index) => (
+                            <ProjectItem
+                                key={project.title}
+                                project={project}
+                                index={index}
+                                isOpen={activeIndex === index}
+                                onToggle={() => setActiveIndex(activeIndex === index ? null : index)}
+                            />
+                        ))}
+                    </div>
+                </section>
+            </main>
 
             <Lifecycle />
 
-            <section id="why-us" className="benefits-section content-width" aria-labelledby="benefits-title">
+            <section id="why-us" className="benefits-section content-width site-shell is-last" aria-labelledby="benefits-title">
                 <h2 id="benefits-title">Why <span className="accent-text">Choose</span> Invasion-Craft</h2>
                 <div className="benefits-grid">
                     <article className="benefit">
@@ -365,6 +367,6 @@ export default function HomeClient() {
                     </form>
                 </DialogContent>
             </Dialog>
-        </main>
+        </>
     );
 }
