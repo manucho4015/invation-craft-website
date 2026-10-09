@@ -14,6 +14,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--secondary);
   --color-accent-foreground: var(--foreground);
+  --color-blue: var(--blue);
   --color-card: var(--background);
   --color-card-foreground: var(--foreground);
   --color-popover: var(--background);
@@ -35,6 +36,7 @@
   --border: oklch(0.9 0.01 250);
   --canvas: oklch(0.88 0.035 250);
   --ink-inverse: oklch(0.99 0 0);
+  --blue: #01417b;
   --blue-dark: oklch(0.3 0.12 262);
   --blue-light: oklch(0.84 0.075 250);
   --hero-shade: linear-gradient(
