@@ -76,13 +76,23 @@ export default function ProjectItem({
         <div className="process-item" style={{ opacity: 0 }}>
             <Button
                 variant="ghost"
-                className="process-toggle"
+                className="process-toggle flex w-full items-center justify-between gap-4 text-left"
                 onClick={onToggle}
                 aria-expanded={isOpen}
                 aria-controls={`project-${index}`}
             >
                 <span className="process-label"><span>0{index + 1}</span><span>{project.title}</span></span>
-                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+                <svg
+                    className="ml-auto shrink-0"
+                    width="15"
+                    height="15"
+                    viewBox="0 0 15 15"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    aria-hidden="true"
+                >
                     <line x1="1.5" y1="7.5" x2="13.5" y2="7.5" />
                     <line ref={vLineRef} x1="7.5" y1="1.5" x2="7.5" y2="13.5" />
                 </svg>
