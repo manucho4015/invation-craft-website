@@ -3,6 +3,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { Button } from "@/components/button";
 import type { Project } from "../../types/project";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function ProjectItem({
     project,
@@ -27,7 +28,7 @@ export default function ProjectItem({
         tlRef.current?.kill();
 
         if (isOpen) {
-            const tl = gsap.timeline();
+            const tl = gsap.timeline({ onComplete: () => ScrollTrigger.refresh() });
             tl.set(wrap, { visibility: "visible" })
                 .to(wrap, { height: "auto", duration: 0.7, ease: "power3.inOut" })
                 .fromTo(
@@ -57,7 +58,7 @@ export default function ProjectItem({
             tlRef.current = tl;
         } else {
             tlRef.current = gsap
-                .timeline({ onComplete: () => { gsap.set(wrap, { visibility: "hidden" }); } })
+                .timeline({ onComplete: () => { gsap.set(wrap, { visibility: "hidden" }); ScrollTrigger.refresh(); } })
                 .to(wrap, { height: 0, duration: 0.5, ease: "power3.inOut" });
         }
 
