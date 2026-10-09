@@ -82,6 +82,7 @@ export default function Lifecycle() {
     const linesRef = useRef<ScanLine[]>([]);
     const rafRef = useRef<number>(0);
     const sizeRef = useRef({ w: 0, h: 0 });
+    const dotRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     // ── Blueprint canvas animation (unchanged) ───────────────────────────────
     useEffect(() => {
@@ -261,10 +262,14 @@ export default function Lifecycle() {
         // Build SVG connecting path from item positions
         if (path) {
             const points = Array.from({ length: n }, (_, i) => {
-                const { leftPct, bottomPct } = getItemPos(i, n);
+                const item = itemRefs.current[i];
+                const dot = dotRefs.current[i];
+                if (!item || !dot) return { x: 0, y: 0 };
+                // offsetLeft/offsetTop ignore the GSAP transforms (y: 32, scale: 0.85),
+                // so this gives the dot's final resting centre
                 return {
-                    x: (leftPct / 100) * containerW + 12, // +12 aligns to the dot node center
-                    y: containerH - (bottomPct / 100) * containerH,
+                    x: item.offsetLeft + dot.offsetLeft + dot.offsetWidth / 2,
+                    y: item.offsetTop + dot.offsetTop + dot.offsetHeight / 2,
                 };
             });
             const d = points.reduce(
@@ -404,7 +409,8 @@ export default function Lifecycle() {
                                     </span>
 
                                     {/* Node dot with ring — the point the path threads through */}
-                                    <div className="relative flex items-center justify-center w-3 h-3 shrink-0">
+                                    <div ref={(el) => { dotRefs.current[i] = el; }}
+                                        className="relative flex items-center justify-center w-3 h-3 shrink-0">
                                         <div className="w-1.5 h-1.5 rounded-full bg-white/70" />
                                         <div className="absolute w-3 h-3 rounded-full border border-white/25" />
                                     </div>
