@@ -11,8 +11,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 
 // PLACEHOLDER CONTENT: swap in your real details and routes
-const ADDRESS = "Invasion-Craft HQ, Your Street, Your City, Your Country";
-const EMAIL = "hello@invasion-craft.com";
+const ADDRESS = "Invation-Craft HQ, Your Street, Your City, Your Country";
+const EMAIL = "hello@invation-craft.com";
 const PHONE = "+000 000 000 000";
 
 const COLUMNS = [
@@ -234,7 +234,7 @@ export default function Footer({ onContact }: { onContact?: () => void }) {
                             <p data-bottom className="max-w-sm text-[13px] leading-relaxed text-white/85">{ADDRESS}</p>
                             <p data-bottom className="flex items-center gap-2 text-[13px] text-white/85">
                                 <CodeXml size={16} strokeWidth={1.8} aria-hidden="true" />
-                                © {nowYear} Invasion-Craft. All rights reserved.
+                                © {nowYear} Invation-Craft. All rights reserved.
                             </p>
                         </div>
 
@@ -272,7 +272,7 @@ export default function Footer({ onContact }: { onContact?: () => void }) {
                         className="whitespace-nowrap px-2 text-center font-semibold text-white/20"
                         style={{ fontSize: "12.5cqw", lineHeight: 0.85, letterSpacing: "-0.04em" }}
                     >
-                        Invasion-Craft
+                        Invation-Craft
                     </div>
                 </div>
             </div>
