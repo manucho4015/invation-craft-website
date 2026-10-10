@@ -32,14 +32,11 @@ import studio from "../public/technology-studio.jpg";
 import team from "../public/team-studio.jpg";
 import ProjectItem from "@/components/home/ProjectItem";
 import Lifecycle from "@/components/home/LifeCycle";
+import Footer from "@/components/layout/Footer";
 
 gsap.registerPlugin(ScrollTrigger, Observer, ScrollToPlugin);
 
 const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
-
-const currentYear = new Date().getFullYear();
-
-
 
 // PLACEHOLDER CONTENT: swap in your real projects and screenshots
 const projects: Project[] = [
@@ -328,13 +325,7 @@ export default function HomeClient() {
                 </div>
             </section>
 
-            <footer className="footer content-width">
-                <Brand />
-                <span className="footer-note">© {currentYear} Invasion-Craft. Crafted for what’s next.</span>
-                <Button variant="link" size="sm" onClick={openContact}>
-                    Let’s build something <ArrowRight />
-                </Button>
-            </footer>
+            <Footer onContact={openContact} />
 
             <Dialog open={contactOpen} onOpenChange={setContactOpen}>
                 <DialogContent className="sm:max-w-lg">
