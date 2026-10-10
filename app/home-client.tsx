@@ -49,9 +49,9 @@ const projects: Project[] = [
 
 function Brand() {
     return (
-        <a href="#home" className="brand" aria-label="Invasion-Craft home">
+        <a href="#home" className="brand" aria-label="Invation-Craft home">
             <span className="brand-mark"><CodeXml size={26} strokeWidth={1.8} /></span>
-            invasion-craft<span className="accent-text">.</span>
+            invation-craft<span className="accent-text">.</span>
         </a>
     );
 }
@@ -185,11 +185,11 @@ export default function HomeClient() {
     function downloadBrief(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const text = `INVASION-CRAFT — PROJECT BRIEF\n\nName: ${data.get("name")}\nEmail: ${data.get("email")}\nPlatform: ${data.get("platform")}\n\nProject idea\n${data.get("idea")}\n`;
+        const text = `INVATION-CRAFT — PROJECT BRIEF\n\nName: ${data.get("name")}\nEmail: ${data.get("email")}\nPlatform: ${data.get("platform")}\n\nProject idea\n${data.get("idea")}\n`;
         const url = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
         const link = document.createElement("a");
         link.href = url;
-        link.download = "invasion-craft-project-brief.txt";
+        link.download = "invation-craft-project-brief.txt";
         link.click();
         URL.revokeObjectURL(url);
         setBriefReady(true);
@@ -232,7 +232,7 @@ export default function HomeClient() {
                     <div className="hero-copy">
                         <div>
                             <div className="eyebrow">Ideas into impact</div>
-                            <h1 id="hero-title">Invasion-Craft<br />Software, thoughtfully built.</h1>
+                            <h1 id="hero-title">Invation-Craft<br />Software, thoughtfully built.</h1>
                         </div>
                         <div>
                             <p>We bring your ideas to life through purposeful SaaS applications. Web, mobile, and desktop — crafted to work beautifully together.</p>
@@ -256,7 +256,7 @@ export default function HomeClient() {
                     <div className="about-card">
                         <div className="about-copy">
                             <h2 id="about-title">Who <span className="accent-text">We</span> Are</h2>
-                            <p>We’re Invasion-Craft. A technology company turning ambitious ideas into software that makes a difference.</p>
+                            <p>We’re Invation-Craft. A technology company turning ambitious ideas into software that makes a difference.</p>
                             <p>From the first conversation to the final release, we bring design and engineering together to craft SaaS applications around your business — and the people who use them.</p>
                         </div>
                         <Image
@@ -291,7 +291,7 @@ export default function HomeClient() {
             <Lifecycle />
 
             <section id="why-us" className="benefits-section content-width site-shell is-last" aria-labelledby="benefits-title">
-                <h2 id="benefits-title">Why <span className="accent-text">Choose</span> Invasion-Craft</h2>
+                <h2 id="benefits-title">Why <span className="accent-text">Choose</span> Invation-Craft</h2>
                 <div className="benefits-grid">
                     <article className="benefit">
                         <Layers3 className="benefit-icon" />
